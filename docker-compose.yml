@@ -111,7 +111,7 @@ services:
         ports:
             - '8001:80'
 networks:
-    sail:d
+    sail:
         driver: bridge
 volumes:
     sail-mysql:
