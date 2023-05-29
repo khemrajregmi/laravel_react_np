@@ -17,9 +17,8 @@ return new class extends Migration
             $table->string('author');
             $table->string('source');
             $table->time('published_at');
-            $table->integer('category_id');
-            $table->foreign('category_id')
-                ->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });
     }
