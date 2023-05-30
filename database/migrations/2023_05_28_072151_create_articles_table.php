@@ -12,8 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+                $table->id();
+                $table->string('title');
+                $table->text('content');
+                $table->string('author');
+                $table->string('source');
+                $table->unsignedBigInteger('category_id');
+                $table->timestamp('published_at')->nullable();
+                $table->timestamps();
+                $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
         });
     }
 
