@@ -14,7 +14,7 @@ class Preference extends Model
     protected $fillable = [
         'user_id',
         'source',
-        'category',
+        'category_id',
         'author'
     ];
 
