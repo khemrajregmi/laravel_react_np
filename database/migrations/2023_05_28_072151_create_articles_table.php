@@ -15,10 +15,11 @@ return new class extends Migration
                 $table->id();
                 $table->string('title');
                 $table->text('content');
+                $table->text('url')->nullable();
                 $table->string('author')->nullable();
-                $table->string('source');
+                $table->string('source')->nullable();
                 $table->unsignedBigInteger('category_id')->nullable();
-                $table->timestamp('published_at')->nullable();
+                $table->datetime('published_at')->nullable();
                 $table->timestamps();
                 $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
