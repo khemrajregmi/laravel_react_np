@@ -28,7 +28,7 @@ const Feed = () => {
             });
             const { data: responseData } = response.data;
             setData(responseData);
-            setVisibleItems(5);
+            setVisibleItems(6);
             setIsLoading(false);
         } catch (error) {
             console.error(error);
@@ -40,13 +40,13 @@ const Feed = () => {
         const response = await axios.get('http://localhost/api/feed', {
             params: {
                 ...filter,
-                page: Math.ceil(visibleItems / 5) + 1,
-                per_page: 5,
+                page: Math.ceil(visibleItems / 6) + 1,
+                per_page: 6,
             },
         });
         const { data: newItems } = response.data;
         setData((prevData) => [...prevData, ...newItems]);
-        setVisibleItems((prevVisibleItems) => prevVisibleItems + 5);
+        setVisibleItems((prevVisibleItems) => prevVisibleItems + 6);
         setIsLoading(false);
     };
 
@@ -101,22 +101,25 @@ const Feed = () => {
             <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {data.slice(0, visibleItems).map((item) => (
                     <li key={item.id}>
+                        <a href={item.url} target="_blank" rel="noopener noreferrer">
+
                         <div className="p-6 bg-white border border-gray-200 shadow-xl rounded-lg">
                             <h5 className="my-2 text-2xl font-bold tracking-tight">
                                 {item.title}
                             </h5>
-                            <p className="font-normal text-gray-700">Email: {user.email}</p>
+                            <p className="font-normal text-gray-700">Category: {item.category.name}</p>
                             {item.source ? (
                                 <p className="font-normal text-gray-700">
-                                    Author:{' '}
+                                    Source:{' '}
                                     <span className="text-green-500">{item.source}</span>
                                 </p>
                             ) : (
                                 <p className="font-normal text-gray-700">
-                                    Author: <span className="text-red-500">Not available</span>
+                                    Source: <span className="text-red-500">Not available</span>
                                 </p>
                             )}
                         </div>
+                        </a>
                     </li>
                 ))}
             </ul>
