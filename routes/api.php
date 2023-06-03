@@ -19,8 +19,13 @@ use App\Http\Controllers\API\NewsController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/feed', [NewsController::class, 'newsFeed']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-    Route::get('/news', [NewsController::class, 'search']);
+Route::middleware('auth:sanctum')->group(function () {
+//    Route::get('/news', [NewsController::class, 'search']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', [AuthController::class, 'user']);
+//    Route::get('/feed', [AuthController::class, 'newsFeed']);
+//    Route::get('/feed', [NewsController::class, 'newsFeed']);
+
 });
