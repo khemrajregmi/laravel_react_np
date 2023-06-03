@@ -2,64 +2,79 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Article;
 use App\Models\User;
-use Illuminate\Http\Response;
 use Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 
 
 class AuthController extends BaseController
 {
-    /**
-     * Register api
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function register(Request $request): JsonResponse
+    // register a new user method
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
+
+        $data = $request->validated();
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
         ]);
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->plainTextToken;
-        $success['name'] =  $user->name;
+        $cookie = cookie('token', $token, 60 * 24); // 1 day
 
-        return $this->sendResponse($success, 'User register successfully.');
+        return response()->json([
+            'user' => new UserResource($user),
+        ])->withCookie($cookie);
     }
 
-    /**
-     * Login api
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function login(Request $request): JsonResponse
+    // login a user method
+    public function login(LoginRequest $request) {
+        $data = $request->validated();
+
+        $user = User::where('email', $data['email'])->first();
+
+        if (!$user || !Hash::check($data['password'], $user->password)) {
+            return response()->json([
+                'message' => 'Email or password is incorrect!'
+            ], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $cookie = cookie('token', $token, 60 * 24); // 1 day
+
+        return response()->json([
+            'user' => new UserResource($user),
+        ])->withCookie($cookie);
+    }
+
+    // logout a user method
+    public function logout(Request $request): JsonResponse
     {
-//        dd($request->all());
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-            $user = Auth::user();
-//            dd($user);
-            $success['token'] =  $user->createToken('MyApp')->plainTextToken;
-            $success['name'] =  $user->name;
-
-            return $this->sendResponse($success, 'User login successfully.');
-        }
-        else{
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
-        }
+        dd('you reach here');
+        $request->user()->currentAccessToken()->delete();
+        $cookie = cookie()->forget('token');
+        return response()->json([
+            'message' => 'Logged out successfully!'
+        ])->withCookie($cookie);
     }
+
+    // get the authenticated user method
+    public function user(Request $request): UserResource
+    {
+        return new UserResource($request->user());
+    }
+
+
+
 }

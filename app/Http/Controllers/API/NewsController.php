@@ -3,36 +3,23 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
-    public function search(Request $request)
+    public function newsFeed(Request $request): \Illuminate\Http\JsonResponse
     {
-        $keyword = $request->input('keyword');
-        $date = $request->input('date');
-        $category = $request->input('category');
-        $source = $request->input('source');
+//        dd('la ya pugyo');
+        $perPage = $request->input('per_page', 10);
+        $page = $request->input('page', 1);
 
-        $apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
+        $posts = Article::orderBy('created_at', 'desc')
+            ->paginate($perPage, ['*'], 'page', $page);
 
-        $client = new Client();
-
-        $response = $client->get('https://api.newsapi.org/v2/everything', [
-            'query' => [
-                'q' => $keyword,
-                'from' => $date,
-                'category' => $category,
-                'sources' => $source,
-                'apiKey' => $apiKey,
-            ],
+        return response()->json([
+            'data' => $posts->items(),
+            'totalPages' => $posts->lastPage(),
         ]);
-
-//        dd($response);
-        $articles = json_decode($response->getBody(), true)['articles'];
-
-        // Implement pagination or infinite scrolling logic here
-        // Return the relevant articles as JSON response
-        return response()->json($articles);
     }
 }
