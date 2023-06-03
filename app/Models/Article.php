@@ -15,11 +15,11 @@ class Article extends Model
      * @var array
      */
     protected $table = 'articles';
+    protected int $category_id = 0; // Initialize the property with a default value
 
     public mixed $content;
     public mixed $title;
     public mixed $author;
-    public mixed $category_id;
     public mixed $published_at;
     public mixed $source;
     protected $primaryKey = 'id';
