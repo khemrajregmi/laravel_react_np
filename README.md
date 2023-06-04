@@ -11,12 +11,16 @@
 
 This project is News aggregator build with Laravel Reactjs and Tailwindcss
 
+## Requirements
+`Composer version 2.X`
+`php 8.2`
+
 ## Getting Started
 
 1. Clone this repository and `cd` into it.
 2. Execute `composer install` a to download dependencies of laravel.
-3. `./vendor/bin/sail up ` to run docker environment
-4. copy `.env.example` and make `.env`
+3. copy `.env.example` and make `.env`
+4. `./vendor/bin/sail up ` to run docker environment
 5. `php artisan migrate`, `php artisan db:seed`
 6. `php artisan app:fetch-news-and-articles` to run cronjob 
 7. `php artisan serve`
