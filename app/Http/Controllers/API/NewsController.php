@@ -10,17 +10,6 @@ class NewsController extends Controller
 {
     public function newsFeed(Request $request): \Illuminate\Http\JsonResponse
     {
-//        dd('la ya pugyo');
-//        $perPage = $request->input('per_page', 10);
-//        $page = $request->input('page', 1);
-//
-//        $posts = Article::orderBy('created_at', 'desc')
-//            ->paginate($perPage, ['*'], 'page', $page);
-//
-//        return response()->json([
-//            'data' => $posts->items(),
-//            'totalPages' => $posts->lastPage(),
-//        ]);
         $perPage = $request->input('per_page', 10);
         $page = $request->input('page', 1);
 
@@ -45,5 +34,30 @@ class NewsController extends Controller
             'data' => $posts->items(),
             'totalPages' => $posts->lastPage(),
         ]);
+    }
+
+    public function index(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $sources = $request->get('sources', []);
+        $categories = $request->get('categories', []);
+        $authors = $request->get('authors', []);
+
+        $query = NewsArticle::query();
+
+        if (!empty($sources)) {
+            $query->whereIn('source', $sources);
+        }
+
+        if (!empty($categories)) {
+            $query->whereIn('category', $categories);
+        }
+
+        if (!empty($authors)) {
+            $query->whereIn('author', $authors);
+        }
+
+        $newsFeed = $query->get();
+
+        return response()->json(['data' => $newsFeed]);
     }
 }

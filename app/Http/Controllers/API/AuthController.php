@@ -61,7 +61,6 @@ class AuthController extends BaseController
     // logout a user method
     public function logout(Request $request): JsonResponse
     {
-        dd('you reach here');
         $request->user()->currentAccessToken()->delete();
         $cookie = cookie()->forget('token');
         return response()->json([
@@ -74,7 +73,4 @@ class AuthController extends BaseController
     {
         return new UserResource($request->user());
     }
-
-
-
 }
