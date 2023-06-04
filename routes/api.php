@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\NewsController;
+use App\Http\Controllers\API\AuthorContorller;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\NewsFeedController;
+use App\Http\Controllers\API\PreferenceController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +27,13 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/feed', [NewsController::class, 'newsFeed']);
 
 Route::middleware('auth:sanctum')->group(function () {
-//    Route::get('/news', [NewsController::class, 'search']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
-//    Route::get('/feed', [AuthController::class, 'newsFeed']);
-//    Route::get('/feed', [NewsController::class, 'newsFeed']);
+    Route::get('/personalized-news-feed', [NewsFeedController::class, 'index']);
 
+    Route::get('/categories', [CategoryController::class, 'index']);
+//    Route::get('/authors', [AuthorContorller::class, 'index']);
+//    Route::get('/news-feed', [NewsFeedController::class, 'index']);
+    Route::post('/preferences', [PreferenceController::class, 'store']);
+    Route::get('/preferences', [PreferenceController::class, 'index']);
 });
