@@ -5,8 +5,9 @@ import Profile from './pages/Profile';
 import Register from './pages/Register';
 import ProtectedLayout from './components/ProtectedLayout';
 import GuestLayout from './components/GuestLayout';
-import News from "./pages/NewsFeed.jsx";
 import NewsFeed from "./pages/NewsFeed.jsx";
+import PersonalizedNewsFeed from "./pages/PersonalizedNewsFeed.jsx";
+import Preference from "./pages/PersonalizedNewsFeed.jsx";
 
 const router = createBrowserRouter([
     {
@@ -35,20 +36,14 @@ const router = createBrowserRouter([
                 path: '/profile',
                 element: <Profile />,
             },
-        ],
-    },
-    {
-        path: '/',
-        element: <ProtectedLayout />,
-        children: [
             {
                 path: '/news',
                 element: <NewsFeed />,
             },
             {
-                path: '/news',
-                element: <NewsFeed />,
-            },
+                path: '/preference',
+                element: <Preference />,
+            }
         ],
     },
 ]);
