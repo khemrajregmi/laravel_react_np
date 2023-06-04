@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('preferences', function (Blueprint $table) {
             $table->id();
 //            $table->string('title');
-//            $table->string('author');
-            $table->string('source');
-            $table->time('published_at');
+            $table->string('author')->nullable();
+            $table->string('source')->nullable();
+            $table->time('published_at')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');            $table->timestamps();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
+            $table->timestamps();
         });
     }
 
