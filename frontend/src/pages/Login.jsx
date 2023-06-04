@@ -2,8 +2,11 @@ import React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import axios from '../axios';
 import { useAuth } from '../contexts/AuthContext';
+import {  useNavigate } from 'react-router-dom';
+
 
 export default function Login() {
+    const navigate = useNavigate();
     const { setUser, csrfToken } = useAuth();
     const [error, setError] = React.useState(null);
 
@@ -19,12 +22,13 @@ export default function Login() {
         try {
             const resp = await axios.post('/login', body);
             if (resp.status === 200) {
-                console.log('you reach here');
+                // console.log('you reach here');
                 setUser(resp.data.user);
-                // console.log('you reach here noch');
-                return <Navigate to="/profile" />;
+                console.log('you reach here noch');
+                return  navigate('/news');
             }
         } catch (error) {
+            console.log(error);
             if (error.response.status === 401) {
                 setError(error.response.data.message);
             }

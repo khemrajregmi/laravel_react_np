@@ -10,14 +10,14 @@ const Feed = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState({
         date: null,
-        category: '',
-        source: '',
+        category: null,
+        source: null,
     });
 
     const { user } = useAuth();
 
     useEffect(() => {
-        fetchData();
+        fetchData().then(r => {});
     }, [filter]);
 
     const fetchData = async () => {

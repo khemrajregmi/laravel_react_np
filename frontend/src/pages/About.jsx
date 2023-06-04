@@ -4,28 +4,13 @@ export default function About() {
     return (
         <>
             <div className="text-6xl font-bold text-slate-600">Laravel News Aggregator</div>
-            <hr className="bg-slate-400 h-1 w-full my-4" />
+            <hr className="bg-slate-800 h-2 w-full my-6" />
+
             <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam
-                soluta veniam sequi modi nihil eius explicabo quasi totam quidem
-                voluptatibus ex, obcaecati architecto perspiciatis dolorem magni rem vel
-                cupiditate repudiandae?
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione eaque
-                distinctio sunt deleniti voluptatum nostrum expedita voluptatibus
-                aliquid mollitia, nam vero! Sed suscipit saepe quo cupiditate!
-                Voluptatibus illum amet nulla? Eveniet reiciendis voluptas provident
-                aliquid, voluptatum, tempora reprehenderit neque, ad ipsa similique quae
-                dignissimos amet odio distinctio atque! Deserunt animi dicta quisquam
-                voluptates iste dolorum architecto, sapiente numquam ipsa! Odit.
-                Adipisci dignissimos tempora, praesentium excepturi, iste aliquid,
-                debitis rem id aperiam itaque asperiores soluta similique eligendi sint
-                ut necessitatibus architecto quos ab fugiat harum rerum magnam nulla
-                distinctio? Aut, nesciunt. Voluptates doloribus quibusdam voluptatem
-                vero in. Itaque dicta quae error nemo sapiente quos id, magnam numquam
-                maiores vero sed perferendis quia nihil impedit deleniti doloremque
-                repellat! Ullam rem libero ut?
+                Welcome to my take-home challenge for the FullStack web developer position. I feel great and
+                excited to see may evaluation of skills and experience in action. The challenge is to build a news
+                aggregator website that pulls articles from various sources and displays them in a clean,
+                easy-to-read format. I take 3 sources that are NewYork Times , Newsapi and The Guardians
             </p>
         </>
     );
