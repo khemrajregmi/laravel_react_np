@@ -17,7 +17,7 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $category =['business','health','science','sports','technology'];
+        $category =['Business','Health','Science','Sports','Technology'];
         foreach ($category as $value){
             DB::table(self::TABLE)->insert([
                 self::CATEGORY_NAME => $value,
