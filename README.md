@@ -33,3 +33,10 @@ This project is News aggregator build with Laravel Reactjs and Tailwindcss
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+![login page](./resources/images/Screenshot 2023-06-06 at 00.08.44.png)
+![Register page](./resources/images/Screenshot%202023-06-06%20at%2000.22.58.png)
+![Profile and Preference](./resources/images/Screenshot%202023-06-06%20at%2000.08.37.png)
+![News feed with view more feature](./resources/images/Screenshot%202023-06-06%20at%2000.09.01.png)
+
+
