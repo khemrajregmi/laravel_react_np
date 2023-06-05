@@ -13,6 +13,7 @@ This project is News aggregator build with Laravel Reactjs and Tailwindcss
 
 ## Requirements
 `Composer version 2.X`
+
 `php 8.2`
 
 ## Getting Started
