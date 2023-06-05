@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const Feed = () => {
+const NewsFeed = () => {
     const [data, setData] = useState([]);
     const [visibleItems, setVisibleItems] = useState(5);
     const [isLoading, setIsLoading] = useState(false);
@@ -136,4 +136,4 @@ const Feed = () => {
     );
 };
 
-export default Feed;
+export default NewsFeed;
