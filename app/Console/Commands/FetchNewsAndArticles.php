@@ -3,10 +3,10 @@ namespace App\Console\Commands;
 
 use App\Models\Category;
 use App\Repositories\ArticleRepository;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+use App\Services\ArticleFetchers\NYTimesArticleFetcher;
+use App\Services\ArticleFetchers\NewsAPIArticleFetcher;
+use App\Services\ArticleFetchers\TheGuardianArticleFetcher;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
 
 class FetchNewsAndArticles extends Command
 {
@@ -15,17 +15,13 @@ class FetchNewsAndArticles extends Command
     protected $description = 'Fetches new news and articles from news APIs';
 
     protected $articleRepository;
+    protected $apiDetails;
 
     public function __construct(ArticleRepository $articleRepository)
     {
         parent::__construct();
         $this->articleRepository = $articleRepository;
-    }
-
-    public function handle()
-    {
-        $categories = Category::all();
-        $apiDetails = [
+        $this->apiDetails = [
             'NewsAPI' => [
                 'api_key' => env('NEWSAPI_API_KEY'),
                 'url' => env('NEWSAPI_URL'),
@@ -39,99 +35,33 @@ class FetchNewsAndArticles extends Command
                 'url' => env('THEGUARDIAN_URL'),
             ],
         ];
+    }
+
+    public function handle()
+    {
+        $categories = Category::all();
 
         foreach ($categories as $category) {
-            foreach ($apiDetails as $apiDetail => $apiValue) {
+            foreach ($this->apiDetails as $apiDetail => $apiValue) {
                 switch ($apiDetail) {
                     case 'NYTimes':
-                        $this->fetchNYTimesArticles($category, $apiValue);
+                        $fetcher = new NYTimesArticleFetcher($this->articleRepository, $apiValue['url'], $apiValue['api_key']);
+                        $fetcher->fetchArticles($category);
                         break;
 
                     case 'NewsAPI':
-                        $this->fetchNewsAPIArticles($category, $apiValue);
+                        $fetcher = new NewsAPIArticleFetcher($this->articleRepository, $apiValue['url'], $apiValue['api_key']);
+                        $fetcher->fetchArticles($category);
                         break;
 
                     default:
-                        $this->fetchDefaultArticles($category, $apiValue);
+                        $fetcher = new TheGuardianArticleFetcher($this->articleRepository, $apiValue['url'], $apiValue['api_key']);
+                        $fetcher->fetchArticles($category);
                         break;
                 }
             }
         }
 
         $this->info('New articles fetched and stored successfully!');
-    }
-
-    protected function fetchNYTimesArticles($category, $apiValue): void
-    {
-        $client = new Client();
-        $response = $client->get($apiValue['url'] . $category->name . '.json', [
-            'query' => [
-                'api-key' => $apiValue['api_key'],
-            ],
-        ]);
-        $articles = json_decode($response->getBody(), true)['results'];
-
-        foreach ($articles as $articleData) {
-            $this->articleRepository->create([
-                'title' => $articleData['title'],
-                'content' => $articleData['abstract'],
-                'author' => $articleData['byline'],
-                'category_id' => $category->id,
-                'published_at' => $articleData['published_date'],
-                'url' => $articleData['url'],
-                'source' => 'NYTimes',
-            ]);
-        }
-    }
-
-    protected function fetchNewsAPIArticles($category, $apiValue): void
-    {
-        $client = new Client();
-        $response = $client->get($apiValue['url'], [
-            'query' => [
-                'q' => $category->name,
-                'apiKey' => $apiValue['api_key'],
-            ],
-        ]);
-        $articles = json_decode($response->getBody(), true)['articles'];
-
-        foreach ($articles as $articleData) {
-            $this->articleRepository->create([
-                'title' => $articleData['title'] ?? '',
-                'content' => $articleData['description'],
-                'author' => $articleData['author'],
-                'category_id' => $category->id,
-                'published_at' => Carbon::parse($articleData['publishedAt'])->format('Y-m-d H:i:s'),
-                'url' => $articleData['url'],
-                'source' => 'NewsAPI',
-            ]);
-        }
-    }
-
-    protected function fetchDefaultArticles($category, $apiValue): void
-    {
-        $client = new Client();
-        $response = $client->get($apiValue['url'], [
-            'query' => [
-                'section' => $category->name,
-                'page-size' => 200,
-                'api-key' => $apiValue['api_key'],
-            ],
-        ]);
-        $articles = json_decode($response->getBody(), true)['response']['results'];
-
-        foreach ($articles as $articleData) {
-            $publishedAt = isset($articleData['webPublicationDate']) ? Carbon::parse($articleData['webPublicationDate'])->format('Y-m-d H:i:s') : '';
-
-            $this->articleRepository->create([
-                'title' => $articleData['webTitle'],
-                'content' => '',
-                'author' => '',
-                'category_id' => $category->id,
-                'published_at' => $publishedAt,
-                'url' => Carbon::parse($articleData['webPublicationDate'])->format('Y-m-d H:i:s'),
-                'source' => 'TheGuardian',
-            ]);
-        }
     }
 }
