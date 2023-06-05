@@ -7,6 +7,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PreferenceRequest extends FormRequest
 {
+    public mixed $category_id;
+    public mixed $author;
+
     /**
      * Determine if the user is authorized to make this request.
      */
