@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PreferenceRequest;
 use App\Models\Preference;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PreferenceController extends Controller
@@ -13,17 +14,23 @@ class PreferenceController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        dd('you reach here');
         $user = $request->user();
+        $preference = Preference::with('category')->where('user_id', $user->id)->first();
+        return response()->json($preference);
+    }
 
-        $preference = Preference::where('user_id', $user->id)->first();
+    public function getPreferences($id): JsonResponse
+    {
+        // Assuming the preferences are stored in a "preferences" table and each preference has a "user_id" column
+        $preference = Preference::with('category')->where('user_id', $id)->first();
 
         return response()->json($preference);
     }
 
     public function store(PreferenceRequest $request): JsonResponse
     {
-        $validatedData = $request->validated();
+        $validatedData = $request->all();
+
         $userId = Auth::id();
 
         Preference::where('user_id', $userId)->delete();
