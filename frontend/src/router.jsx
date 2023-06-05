@@ -6,8 +6,8 @@ import Register from './pages/Register';
 import ProtectedLayout from './components/ProtectedLayout';
 import GuestLayout from './components/GuestLayout';
 import NewsFeed from "./pages/NewsFeed.jsx";
-import PersonalizedNewsFeed from "./pages/PersonalizedNewsFeed.jsx";
-import Preference from "./pages/PersonalizedNewsFeed.jsx";
+import Preference from "./pages/Preference.jsx";
+import PreferenceNews from "./pages/PreferenceNews.jsx";
 
 const router = createBrowserRouter([
     {
@@ -43,6 +43,10 @@ const router = createBrowserRouter([
             {
                 path: '/preference',
                 element: <Preference />,
+            },
+            {
+                path: '/news-preference',
+                element: <PreferenceNews />,
             }
         ],
     },
