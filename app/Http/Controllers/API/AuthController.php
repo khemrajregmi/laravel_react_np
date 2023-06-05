@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\Article;
 use App\Models\User;
 use Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
