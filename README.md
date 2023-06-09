@@ -9,7 +9,8 @@
 
 ## About Project
 
-This project is News aggregator build with Laravel Reactjs and Tailwindcss
+This project is News aggregator build with Laravel Reactjs and Tailwindcss. In this project differeent categories new are fetch from NewYork Times , Newsapi.org and The Guardian
+
 
 ## Requirements
 `Composer version 2.X`
